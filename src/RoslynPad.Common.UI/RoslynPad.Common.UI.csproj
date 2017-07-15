@@ -47,6 +47,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeEditorContext.cs" />
     <Compile Include="Services\IApplicationSettings.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <DependentUpon>Settings.settings</DependentUpon>
