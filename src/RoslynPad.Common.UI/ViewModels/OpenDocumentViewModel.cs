@@ -83,13 +83,11 @@ namespace RoslynPad.UI
 
         public void SetDocument(DocumentViewModel document)
         {
-            Document = document;
+			Document = document ?? throw new ArgumentNullException("document");
 
-            IsDirty = document?.IsAutoSave == true;
+            IsDirty = document.IsAutoSave == true;
 
-            _workingDirectory = Document != null
-                ? Path.GetDirectoryName(Document.Path)
-                : MainViewModel.DocumentRoot.Path;
+            _workingDirectory = Path.GetDirectoryName(Document.Path);
         }
 
         private async Task RenameSymbol()
@@ -211,7 +209,7 @@ namespace RoslynPad.UI
         public async Task AutoSave()
         {
             if (!IsDirty) return;
-            if (Document == null)
+            if (Document?.Name == null)
             {
                 var index = 1;
                 string path;
@@ -234,7 +232,7 @@ namespace RoslynPad.UI
             try
             {
                 var result = SaveResult.Save;
-                if (Document == null || Document.IsAutoSaveOnly)
+                if (Document?.Name == null || Document.IsAutoSaveOnly)
                 {
                     var dialog = _serviceLocator.GetInstance<ISaveDocumentDialog>();
                     dialog.ShowDontSave = promptSave;
@@ -244,7 +242,9 @@ namespace RoslynPad.UI
                     result = dialog.Result;
                     if (result == SaveResult.Save)
                     {
-                        Document?.DeleteAutoSave();
+						if (Document?.Name == null) {
+							Document?.DeleteAutoSave();
+						}
                         Document = MainViewModel.AddDocument(dialog.DocumentName);
                         OnPropertyChanged(nameof(Title));
                     }
@@ -316,7 +316,7 @@ namespace RoslynPad.UI
 
         public NuGetDocumentViewModel NuGet { get; }
 
-        public string Title => Document != null && !Document.IsAutoSaveOnly ? Document.Name : "New";
+        public string Title => Document?.Name != null && !Document.IsAutoSaveOnly ? Document.Name : "New";
 
         public IActionCommand SaveCommand { get; }
 
@@ -498,7 +498,7 @@ namespace RoslynPad.UI
 
         public async Task<string> LoadText()
         {
-            if (Document == null)
+            if (Document?.Name == null)
             {
                 return string.Empty;
             }

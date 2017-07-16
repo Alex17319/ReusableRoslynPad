@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Data;
 using RoslynPad.Utilities;
+using PathIO = System.IO.Path;
 
 namespace RoslynPad.UI
 {
@@ -30,9 +31,11 @@ namespace RoslynPad.UI
 
         private DocumentViewModel(string path, bool isFolder)
         {
+			//Note: Trying to avoid contatenating the name and path then parsing them to separate them again
+			//is messy and results in duplicate code
             Path = path;
             IsFolder = isFolder;
-            Name = isFolder ? System.IO.Path.GetFileName(Path) : System.IO.Path.GetFileNameWithoutExtension(Path);
+            Name = isFolder ? PathIO.GetFileName(Path) : PathIO.GetFileNameWithoutExtension(Path);
             // ReSharper disable once PossibleNullReferenceException
             IsAutoSave = Name.EndsWith(AutoSaveSuffix, StringComparison.OrdinalIgnoreCase);
             if (IsAutoSave)

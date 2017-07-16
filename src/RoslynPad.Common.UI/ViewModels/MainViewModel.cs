@@ -273,7 +273,7 @@ namespace RoslynPad.UI
 
         public void CreateNewDocument()
         {
-            var openDocument = GetOpenDocumentViewModel(null);
+            var openDocument = GetOpenDocumentViewModel(DocumentRoot.CreateNew(documentName: null));
             OpenDocuments.Add(openDocument);
             CurrentOpenDocument = openDocument;
         }
