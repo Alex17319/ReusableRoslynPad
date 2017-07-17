@@ -242,8 +242,8 @@ namespace RoslynPad.UI
                     result = dialog.Result;
                     if (result == SaveResult.Save)
                     {
-						if (Document?.Name == null) {
-							Document?.DeleteAutoSave();
+						if (Document?.Name != null) {
+							Document.DeleteAutoSave();
 						}
                         Document = MainViewModel.AddDocument(dialog.DocumentName);
                         OnPropertyChanged(nameof(Title));
